@@ -84,6 +84,62 @@
                 console.log("The read failed: " + errorObject.code);
             });
 
+            // PHẦN CODE CART
+            // Select your input element.
+            var number = document.getElementById('number');
+
+            // Listen for input event on numInput.
+            number.onkeydown = function(e) {
+                if(!((e.keyCode > 95 && e.keyCode < 106)
+                    || (e.keyCode > 47 && e.keyCode < 58)
+                    || e.keyCode == 8)) {
+                    return false;
+                }
+            }
+
+            $scope.isLogin = false;
+            $scope.auth = Auth;
+
+            // any time auth status updates, add the user data to scope
+            $scope.auth.$onAuth(function(authData) {
+                $scope.authData = authData;
+                // Nếu chưa đăng nhập
+                if (!authData) {
+                    $scope.isLogin = false;
+                }
+                else {
+                    $scope.isLogin = true;
+                }
+            });
+
+            $scope.saveProductChoose = function (){
+                $scope.auth = Auth;
+
+                // any time auth status updates, add the user data to scope
+                $scope.auth.$onAuth(function(authData) {
+                    $scope.authData = authData;
+                    // Nếu chưa đăng nhập
+                    if (!authData) {
+                        return;
+                    }
+                    // Nếu đã đăng nhập
+                    else {
+                        if ($scope.quantity == 0 || $scope.quantity == null || $scope.sizeProduct == null) {
+                            window.alert("XẢY RA LỖI NHẬP! XIN MỜI THỬ LẠI");
+                            return;
+                        }
+
+                        var cartUserRef = new Firebase("https://shoptdp.firebaseio.com/cart/" + authData.uid);
+                        cartUserRef.push({
+                            "product": $scope.product,
+                            "quantity": $scope.quantity,
+                            "size": $scope.sizeProduct,
+                            "status": false
+                        });
+                        window.alert("ĐÃ THÊM VÀO CART!");
+                    }
+                });
+            }
             // Animation Image Object
             jQuery(document).ready(function($){
                 $('#etalage').etalage({
@@ -151,6 +207,62 @@
                 console.log("The read failed: " + errorObject.code);
             });
 
+            // PHẦN CODE CART
+            // Select your input element.
+            var number = document.getElementById('number');
+
+            // Listen for input event on numInput.
+            number.onkeydown = function(e) {
+                if(!((e.keyCode > 95 && e.keyCode < 106)
+                    || (e.keyCode > 47 && e.keyCode < 58)
+                    || e.keyCode == 8)) {
+                    return false;
+                }
+            }
+
+            $scope.isLogin = false;
+            $scope.auth = Auth;
+
+            // any time auth status updates, add the user data to scope
+            $scope.auth.$onAuth(function(authData) {
+                $scope.authData = authData;
+                // Nếu chưa đăng nhập
+                if (!authData) {
+                    $scope.isLogin = false;
+                }
+                else {
+                    $scope.isLogin = true;
+                }
+            });
+
+            $scope.saveProductChoose = function (){
+                $scope.auth = Auth;
+
+                // any time auth status updates, add the user data to scope
+                $scope.auth.$onAuth(function(authData) {
+                    $scope.authData = authData;
+                    // Nếu chưa đăng nhập
+                    if (!authData) {
+                        return;
+                    }
+                    // Nếu đã đăng nhập
+                    else {
+                        if ($scope.quantity == 0 || $scope.quantity == null || $scope.sizeProduct == null) {
+                            window.alert("XẢY RA LỖI NHẬP! XIN MỜI THỬ LẠI");
+                            return;
+                        }
+
+                        var cartUserRef = new Firebase("https://shoptdp.firebaseio.com/cart/" + authData.uid);
+                        cartUserRef.push({
+                            "product": $scope.product,
+                            "quantity": $scope.quantity,
+                            "size": $scope.sizeProduct,
+                            "status": false
+                        });
+                        window.alert("ĐÃ THÊM VÀO CART!");
+                    }
+                });
+            }
             // Animation Image Object
             jQuery(document).ready(function($){
                 $('#etalage').etalage({
@@ -191,6 +303,64 @@
             }, function (errorObject) {
                 console.log("The read failed: " + errorObject.code);
             });
+
+            // PHẦN CODE CART
+            // Select your input element.
+            var number = document.getElementById('number');
+
+            // Listen for input event on numInput.
+            number.onkeydown = function(e) {
+                if(!((e.keyCode > 95 && e.keyCode < 106)
+                    || (e.keyCode > 47 && e.keyCode < 58)
+                    || e.keyCode == 8)) {
+                    return false;
+                }
+            }
+
+            $scope.isLogin = false;
+            $scope.auth = Auth;
+
+            // any time auth status updates, add the user data to scope
+            $scope.auth.$onAuth(function(authData) {
+                $scope.authData = authData;
+                // Nếu chưa đăng nhập
+                if (!authData) {
+                    $scope.isLogin = false;
+                }
+                else {
+                    $scope.isLogin = true;
+                }
+            });
+
+            $scope.saveProductChoose = function (){
+                $scope.auth = Auth;
+
+                // any time auth status updates, add the user data to scope
+                $scope.auth.$onAuth(function(authData) {
+                    $scope.authData = authData;
+                    // Nếu chưa đăng nhập
+                    if (!authData) {
+                        return;
+                    }
+                    // Nếu đã đăng nhập
+                    else {
+                        if ($scope.quantity == 0 || $scope.quantity == null || $scope.sizeProduct == null) {
+                            window.alert("XẢY RA LỖI NHẬP! XIN MỜI THỬ LẠI");
+                            return;
+                        }
+
+                        var cartUserRef = new Firebase("https://shoptdp.firebaseio.com/cart/" + authData.uid);
+                        cartUserRef.push({
+                            "product": $scope.product,
+                            "quantity": $scope.quantity,
+                            "size": $scope.sizeProduct,
+                            "status": false
+                        });
+                        window.alert("ĐÃ THÊM VÀO CART!");
+                    }
+                });
+            }
+
             // Animation Image Object
             jQuery(document).ready(function($){
                 $('#etalage').etalage({
@@ -233,6 +403,63 @@
                 console.log("The read failed: " + errorObject.code);
             });
 
+            // PHẦN CODE CART
+            // Select your input element.
+            var number = document.getElementById('number');
+
+            // Listen for input event on numInput.
+            number.onkeydown = function(e) {
+                if(!((e.keyCode > 95 && e.keyCode < 106)
+                    || (e.keyCode > 47 && e.keyCode < 58)
+                    || e.keyCode == 8)) {
+                    return false;
+                }
+            }
+
+            $scope.isLogin = false;
+            $scope.auth = Auth;
+
+            // any time auth status updates, add the user data to scope
+            $scope.auth.$onAuth(function(authData) {
+                $scope.authData = authData;
+                // Nếu chưa đăng nhập
+                if (!authData) {
+                    $scope.isLogin = false;
+                }
+                else {
+                    $scope.isLogin = true;
+                }
+            });
+
+            $scope.saveProductChoose = function (){
+                $scope.auth = Auth;
+
+                // any time auth status updates, add the user data to scope
+                $scope.auth.$onAuth(function(authData) {
+                    $scope.authData = authData;
+                    // Nếu chưa đăng nhập
+                    if (!authData) {
+                        return;
+                    }
+                    // Nếu đã đăng nhập
+                    else {
+                        if ($scope.quantity == 0 || $scope.quantity == null || $scope.sizeProduct == null) {
+                            window.alert("XẢY RA LỖI NHẬP! XIN MỜI THỬ LẠI");
+                            return;
+                        }
+
+                        var cartUserRef = new Firebase("https://shoptdp.firebaseio.com/cart/" + authData.uid);
+                        cartUserRef.push({
+                            "product": $scope.product,
+                            "quantity": $scope.quantity,
+                            "size": $scope.sizeProduct,
+                            "status": false
+                        });
+                        window.alert("ĐÃ THÊM VÀO CART!");
+                    }
+                });
+            }
+
             // Animation Image Object
             jQuery(document).ready(function($){
                 $('#etalage').etalage({
@@ -273,6 +500,64 @@
             }, function (errorObject) {
                 console.log("The read failed: " + errorObject.code);
             });
+
+            // PHẦN CODE CART
+            // Select your input element.
+            var number = document.getElementById('number');
+
+            // Listen for input event on numInput.
+            number.onkeydown = function(e) {
+                if(!((e.keyCode > 95 && e.keyCode < 106)
+                    || (e.keyCode > 47 && e.keyCode < 58)
+                    || e.keyCode == 8)) {
+                    return false;
+                }
+            }
+
+            $scope.isLogin = false;
+            $scope.auth = Auth;
+
+            // any time auth status updates, add the user data to scope
+            $scope.auth.$onAuth(function(authData) {
+                $scope.authData = authData;
+                // Nếu chưa đăng nhập
+                if (!authData) {
+                    $scope.isLogin = false;
+                }
+                else {
+                    $scope.isLogin = true;
+                }
+            });
+
+            $scope.saveProductChoose = function (){
+                $scope.auth = Auth;
+
+                // any time auth status updates, add the user data to scope
+                $scope.auth.$onAuth(function(authData) {
+                    $scope.authData = authData;
+                    // Nếu chưa đăng nhập
+                    if (!authData) {
+                        return;
+                    }
+                    // Nếu đã đăng nhập
+                    else {
+                        if ($scope.quantity == 0 || $scope.quantity == null || $scope.sizeProduct == null) {
+                            window.alert("XẢY RA LỖI NHẬP! XIN MỜI THỬ LẠI");
+                            return;
+                        }
+
+                        var cartUserRef = new Firebase("https://shoptdp.firebaseio.com/cart/" + authData.uid);
+                        cartUserRef.push({
+                            "product": $scope.product,
+                            "quantity": $scope.quantity,
+                            "size": $scope.sizeProduct,
+                            "status": false
+                        });
+                        window.alert("ĐÃ THÊM VÀO CART!");
+                    }
+                });
+            }
+
             // Animation Image Object
             jQuery(document).ready(function($){
                 $('#etalage').etalage({
@@ -314,6 +599,63 @@
                 console.log("The read failed: " + errorObject.code);
             });
 
+            // PHẦN CODE CART
+            // Select your input element.
+            var number = document.getElementById('number');
+
+            // Listen for input event on numInput.
+            number.onkeydown = function(e) {
+                if(!((e.keyCode > 95 && e.keyCode < 106)
+                    || (e.keyCode > 47 && e.keyCode < 58)
+                    || e.keyCode == 8)) {
+                    return false;
+                }
+            }
+
+            $scope.isLogin = false;
+            $scope.auth = Auth;
+
+            // any time auth status updates, add the user data to scope
+            $scope.auth.$onAuth(function(authData) {
+                $scope.authData = authData;
+                // Nếu chưa đăng nhập
+                if (!authData) {
+                    $scope.isLogin = false;
+                }
+                else {
+                    $scope.isLogin = true;
+                }
+            });
+
+            $scope.saveProductChoose = function (){
+                $scope.auth = Auth;
+
+                // any time auth status updates, add the user data to scope
+                $scope.auth.$onAuth(function(authData) {
+                    $scope.authData = authData;
+                    // Nếu chưa đăng nhập
+                    if (!authData) {
+                        return;
+                    }
+                    // Nếu đã đăng nhập
+                    else {
+                        if ($scope.quantity == 0 || $scope.quantity == null || $scope.sizeProduct == null) {
+                            window.alert("XẢY RA LỖI NHẬP! XIN MỜI THỬ LẠI");
+                            return;
+                        }
+
+                        var cartUserRef = new Firebase("https://shoptdp.firebaseio.com/cart/" + authData.uid);
+                        cartUserRef.push({
+                            "product": $scope.product,
+                            "quantity": $scope.quantity,
+                            "size": $scope.sizeProduct,
+                            "status": false
+                        });
+                        window.alert("ĐÃ THÊM VÀO CART!");
+                    }
+                });
+            }
+
             // Animation Image Object
             jQuery(document).ready(function($){
                 $('#etalage').etalage({
@@ -354,6 +696,64 @@
             }, function (errorObject) {
                 console.log("The read failed: " + errorObject.code);
             });
+
+            // PHẦN CODE CART
+            // Select your input element.
+            var number = document.getElementById('number');
+
+            // Listen for input event on numInput.
+            number.onkeydown = function(e) {
+                if(!((e.keyCode > 95 && e.keyCode < 106)
+                    || (e.keyCode > 47 && e.keyCode < 58)
+                    || e.keyCode == 8)) {
+                    return false;
+                }
+            }
+
+            $scope.isLogin = false;
+            $scope.auth = Auth;
+
+            // any time auth status updates, add the user data to scope
+            $scope.auth.$onAuth(function(authData) {
+                $scope.authData = authData;
+                // Nếu chưa đăng nhập
+                if (!authData) {
+                    $scope.isLogin = false;
+                }
+                else {
+                    $scope.isLogin = true;
+                }
+            });
+
+            $scope.saveProductChoose = function (){
+                $scope.auth = Auth;
+
+                // any time auth status updates, add the user data to scope
+                $scope.auth.$onAuth(function(authData) {
+                    $scope.authData = authData;
+                    // Nếu chưa đăng nhập
+                    if (!authData) {
+                        return;
+                    }
+                    // Nếu đã đăng nhập
+                    else {
+                        if ($scope.quantity == 0 || $scope.quantity == null || $scope.sizeProduct == null) {
+                            window.alert("XẢY RA LỖI NHẬP! XIN MỜI THỬ LẠI");
+                            return;
+                        }
+
+                        var cartUserRef = new Firebase("https://shoptdp.firebaseio.com/cart/" + authData.uid);
+                        cartUserRef.push({
+                            "product": $scope.product,
+                            "quantity": $scope.quantity,
+                            "size": $scope.sizeProduct,
+                            "status": false
+                        });
+                        window.alert("ĐÃ THÊM VÀO CART!");
+                    }
+                });
+            }
+
             // Animation Image Object
             jQuery(document).ready(function($){
                 $('#etalage').etalage({

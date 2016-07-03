@@ -306,4 +306,87 @@
         }
     ]);
 
+    app.controller('CartController', ['$scope', 'Auth', '$firebaseArray',
+        function($scope, Auth, $firebaseArray) {
+            $scope.auth = Auth;
+
+            // any time auth status updates, add the user data to scope
+            $scope.auth.$onAuth(function(authData) {
+                $scope.authData = authData;
+                if (!authData) {
+                    window.location = "login.html";
+                    return;
+                }
+                else {
+                    console.log("CART!!");
+                    var cartUserRef = new Firebase("https://shoptdp.firebaseio.com/cart/" + authData.uid);
+                    $scope.carts = $firebaseArray(cartUserRef);
+
+                }
+            });
+
+            //
+            //$scope.ProductInfo = {};
+            //$scope.showProduct = function($index) {
+            //    $scope.ProductIdx = $index;
+            //    $ProductInfo.name = $cart[$scope.ProductIdx].name;
+            //
+
+            $scope.saveUpdateProduct = function(id, sizeUpdate, quantityUpdate) {
+                var activeId = localStorage.getItem("activeId");
+                var cartUserRef = new Firebase("https://shoptdp.firebaseio.com/cart/" + activeId + "/" + id);
+                if (sizeUpdate == 0 || sizeUpdate == null || quantityUpdate == 0 || quantityUpdate == null){
+                    window.alert("DỮ LIỆU SỬA ĐỔI KHÔNG PHÙ HỢP!");
+                    return;
+                }
+                cartUserRef.update({ size: sizeUpdate, quantity: quantityUpdate  });
+            };
+
+            $scope.buy = function (id, cartProduct, cartSize, cartQuantity) {
+                var activeId = localStorage.getItem("activeId");
+                var cartUserRef = new Firebase("https://shoptdp.firebaseio.com/cart/" + activeId + "/" + id);
+                cartUserRef.update({ status: true  });
+
+                var systemRef = new Firebase("https://shoptdp.firebaseio.com/client/" + activeId + "/cart");
+                systemRef.push({
+                    product: cartProduct,
+                    quantity: cartQuantity,
+                    size: cartSize,
+                    status: false
+                });
+
+                window.alert("CẢM ƠN QUÝ KHÁCH ĐÃ MUA HÀNG! XIN VUI LÒNG ĐỢI NHÂN VIÊN TÔI KIỂM TRA XÁC NHẬN VÀ SẼ GỬI SẢN PHẨM THEO YÊU CẦU!");
+            };
+
+            $scope.allbuy = function (carts) {
+                console.log(carts);
+                carts.$loaded().then(function(data) {
+                    console.log('Initial data loaded', data.length);
+
+                    if (data.length == 0) {
+                        window.alert("VUI LÒNG RA QUẦY CHỌN HÀNG!");
+                    }
+
+                    for (var i = 0; i < data.length; i++) {
+                        if (!data[i].status) {
+                            var activeId = localStorage.getItem("activeId");
+                            var cartUserRef = new Firebase("https://shoptdp.firebaseio.com/cart/" + activeId + "/" + data[i].$id);
+                            cartUserRef.update({ status: true  });
+
+                            var systemRef = new Firebase("https://shoptdp.firebaseio.com/client/" + data[i].$id + "/cart");
+                            systemRef.push({
+                                product: data[i].product,
+                                quantity: data[i].quantity,
+                                size: data[i].size,
+                                status: false
+                            });
+                        }
+                    }
+                });
+
+                window.alert("CẢM ƠN QUÝ KHÁCH ĐÃ MUA HÀNG! XIN VUI LÒNG ĐỢI NHÂN VIÊN TÔI KIỂM TRA XÁC NHẬN VÀ SẼ GỬI SẢN PHẨM THEO YÊU CẦU!");
+            }
+        }
+    ]);
+
 })();
