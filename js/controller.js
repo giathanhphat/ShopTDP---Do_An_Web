@@ -93,6 +93,153 @@
         }
     ]);
 
+    app.component('imagePicker', {
+        templateUrl:"template/image-picker.html",
+        controller: ['$scope', function($scope) {
+            filepicker.setKey("AwhE62zXS3ittGq7Xovynz");
+            $scope.browserImage = function () {
+                filepicker.pick(
+                    {
+                        minitype:'image/*',
+                        services:['COMPUTER','WEBCAM','FACEBOOK','IMAGE_SEARCH', 'URL'],
+                        conversions:['crop','rotate', 'filter']
+                    },
+                    function (img) {
+                        var url = img.url;
+
+                        var refUserActive = new Firebase("https://shoptdp.firebaseio.com/users/" + localStorage.getItem("activeId"));
+                        refUserActive.update({ avatar: url });
+
+                        location.reload();
+                    }
+                );
+            }
+        }]
+    });
+
+    app.controller('ProfileController', ["$scope",
+        function($scope){
+            var refUserActive = new Firebase("https://shoptdp.firebaseio.com/users/" + localStorage.getItem("activeId"));
+
+            refUserActive.once("value", function(snapshot) {
+                $scope.dataUser = snapshot.val();
+
+                // Might need to use $digest to update $scope.
+                $scope.$digest();
+            }, function (errorObject) {
+                console.log("The read failed: " + errorObject.code);
+            });
+
+            $scope.saveUpdateInfo = function() {
+                var refUserActive = new Firebase("https://shoptdp.firebaseio.com/users/" + localStorage.getItem("activeId"));
+                refUserActive.update({
+                    first_name: $scope.dataUser.first_name,
+                    last_name: $scope.dataUser.last_name,
+                    phone: $scope.dataUser.phone,
+                    email: $scope.dataUser.email,
+                    address: $scope.dataUser.address
+                });
+            }
+        }
+    ]);
+
+    app.controller('LoginController', ['$scope', '$http',
+        function($scope, $http) {
+            this.login = function () {
+                var ref = new Firebase("https://shoptdp.firebaseio.com");
+                ref.authWithPassword({
+                    email: $scope.emailLogin,
+                    password: $scope.passwordLogin
+                }, function (error, authData) {
+                    if (error) {
+                        $scope.checkEmailPass = true;
+                        console.log("Login Failed!", error);
+                        $scope.$digest();
+                    } else {
+                        $scope.checkEmailPass = false;
+                        console.log("Authenticated successfully with payload:", authData);
+
+                        localStorage.setItem("activeId", authData.uid);
+
+                        window.location = "youraccount.html";
+                    }
+                });
+            };
+
+            $scope.logfacebook = function () {
+                var ref = new Firebase("https://shoptdp.firebaseio.com");
+                ref.authWithOAuthPopup("facebook", function(error, authData) {
+                    if (error) {
+                        console.log("Login Failed!", error);
+                    } else {
+                        console.log("Authenticated successfully with payload:", authData);
+
+                        localStorage.setItem("activeId", authData.uid);
+
+                        var isUserRef = new Firebase("https://shoptdp.firebaseio.com/users/" + authData.uid);
+                        isUserRef.once("value", function(snapshot) {
+                            if (snapshot.val() != null) {
+                                console.log("Account is existed! Come on!");
+                                window.location = "youraccount.html";
+                                return;
+                            }
+                            else {
+                                console.log("Account is created! Congratulate!");
+                                var usersRef = ref.child("users/" + authData.uid);
+                                usersRef.set({
+                                    first_name: "NEW",
+                                    last_name: "USER",
+                                    email: "empty",
+                                    avatar: "",
+                                    phone: "empty",
+                                    address: "empty"
+                                });
+
+                                window.location = "youraccount.html";
+                            }
+                        });
+                    }
+                });
+            };
+
+            $scope.loggoogle = function () {
+                var ref = new Firebase("https://shoptdp.firebaseio.com");
+                ref.authWithOAuthPopup("google", function(error, authData) {
+                    if (error) {
+                        console.log("Login Failed!", error);
+                    } else {
+                        console.log("Authenticated successfully with payload:", authData);
+
+                        localStorage.setItem("activeId", authData.uid);
+
+                        var isUserRef = new Firebase("https://shoptdp.firebaseio.com/users/" + authData.uid);
+                        isUserRef.once("value", function(snapshot) {
+                            if (snapshot.val() != null) {
+                                console.log("Account is existed! Come on!");
+                                window.location = "youraccount.html";
+                                return;
+                            }
+                            else {
+                                console.log("Account is created! Congratulate!");
+                                var usersRef = ref.child("users/" + authData.uid);
+                                usersRef.set({
+                                    first_name: "NEW",
+                                    last_name: "USER",
+                                    email: "empty",
+                                    avatar: "images/avatar.jpg",
+                                    phone: "empty",
+                                    address: "empty"
+                                });
+
+                                window.location = "youraccount.html";
+                            }
+                        });
+                    }
+                });
+            };
+        }
+    ]);
+
     app.controller('ProductController', ["$scope", "$firebaseArray",
         function($scope, $firebaseArray){
 
