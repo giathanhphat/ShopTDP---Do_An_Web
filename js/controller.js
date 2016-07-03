@@ -75,6 +75,30 @@
         }
     ]);
 
+    app.controller('AccountController', ['$scope', 'Auth',
+        function($scope, Auth) {
+            $scope.auth = Auth;
+
+            // any time auth status updates, add the user data to scope
+            $scope.auth.$onAuth(function(authData) {
+                $scope.authData = authData;
+                if (!authData) {
+                    window.location = "login.html";
+                }
+            });
+
+            $scope.logout = function(){
+                $scope.auth.$unauth();
+            }
+        }
+    ]);
+
+    app.controller('ProductController', ["$scope", "$firebaseArray",
+        function($scope, $firebaseArray){
+
+        }
+    ]);
+
     app.controller('RevolutionController', ['$scope', 'Auth',
         function($scope, Auth){
 
@@ -95,6 +119,44 @@
 
         }
     ]);
-    
+
+    app.controller('RegisterController', ['$scope',
+        function($scope){
+            this.register = function(){
+                if ($scope.passwordRegister !== $scope.rePasswordRegister){
+                    console.log('Password is not duplicated');
+                    window.alert("PASSWORD IS NOT DUPLICATED!");
+                    return;
+                }
+
+                var ref = new Firebase("https://shoptdp.firebaseio.com");
+                ref.createUser({
+                    email    : $scope.emailRegister,
+                    password : $scope.passwordRegister
+                }, function(error, userData) {
+                    if (error) {
+                        console.log("Error creating user:", error);
+                        window.alert("USER IS EXISTED!");
+                        console.log($scope.emailRegister);
+                    } else {
+                        localStorage.setItem("activeId", userData.uid);
+                        console.log(localStorage.getItem("activeId"));
+
+                        var usersRef = ref.child("users/" + userData.uid);
+                        usersRef.set({
+                            first_name: $scope.firstNameRegister,
+                            last_name: $scope.lastNameRegister,
+                            email: $scope.emailRegister,
+                            avatar: "images/avatar.jpg",
+                            phone: "",
+                            address: ""
+                        });
+                        console.log("Successfully created user account with uid:", userData.uid);
+                        window.location = "login.html";
+                    }
+                });
+            };
+        }
+    ]);
 
 })();
